@@ -3,6 +3,8 @@ import * as wbnSign from 'wbn-sign';
 import dotenv from 'dotenv';
 dotenv.config({ path: './.env' });
 
+const key = wbnSign.parsePemKey(process.env.ENC_ED25519KEY, wbnSign.readPassphrase())
+
 export default {
   input: 'src/index.js',
   output: {
@@ -11,14 +13,10 @@ export default {
   },
   plugins: [
     webbundle({
-      baseURL: new wbnSign.WebBundleId(
-        wbnSign.parsePemKey(process.env.ED25519KEY)
-      ).serializeWithIsolatedWebAppOrigin(),
+      baseURL: new wbnSign.WebBundleId(key).serializeWithIsolatedWebAppOrigin(),
       static: { dir: 'static' },
-      output: 'rollup.wbn',
-      integrityBlockSign: {
-        key: process.env.ED25519KEY,
-      },
+      output: 'rollup.swbn',
+      integrityBlockSign: { key },
     }),
   ],
 };

@@ -1,6 +1,6 @@
 
 export WBN_VERSION=0.0.8
-export WBN_SIGN_VERSION=0.0.0
+export WBN_SIGN_VERSION=0.0.1
 
 # Remove old existing bundles.
 rm -f ~/webpack-coralfish-app/wbncli/*.wbn &&

@@ -1,11 +1,11 @@
 # This script is used locally to build eeeeeverything, with webpack.
 
-export WEBPACK_VERSION=0.0.3
+export WEBPACK_VERSION=0.0.4
 export WBN_VERSION=0.0.8
-export WBN_SIGN_VERSION=0.0.0
+export WBN_SIGN_VERSION=0.0.1
 
 # Remove old existing bundles.
-rm -f ~/webpack-coralfish-app/static/*.wbn &&
+rm -f ~/webpack-coralfish-app/static/*wbn &&
 
 # Build underlying wbn package
 cd ~/webpackage/js/bundle && rm -f ./wbn-$WBN_VERSION.tgz && npm i && npm run build && npm pack && 
