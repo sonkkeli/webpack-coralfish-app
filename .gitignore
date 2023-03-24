@@ -2,6 +2,4 @@ node_modules/
 .env
 static/index.js
 static/webpack-bundle.js
-static/*.swbn
-static/*.wbn
-wbncli/*.wbn
+*wbn

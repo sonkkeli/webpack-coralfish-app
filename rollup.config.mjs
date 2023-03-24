@@ -3,7 +3,11 @@ import * as wbnSign from 'wbn-sign';
 import dotenv from 'dotenv';
 dotenv.config({ path: './.env' });
 
-const key = wbnSign.parsePemKey(process.env.ENC_ED25519KEY, wbnSign.readPassphrase())
+// const key = wbnSign.parsePemKey(process.env.ED25519KEY);
+const key = wbnSign.parsePemKey(
+  process.env.ENC_ED25519KEY,
+  await wbnSign.readPassphrase()
+);
 
 export default {
   input: 'src/index.js',
@@ -17,6 +21,17 @@ export default {
       static: { dir: 'static' },
       output: 'rollup.swbn',
       integrityBlockSign: { key },
+      headerOverride: () => {
+        return {
+          'access-control-allow-headers':
+            'Cross-Origin-Embedder-Policy, Cross-Origin-Opener-Policy, Cross-Origin-Resource-Policy',
+          'cross-origin-opener-policy': 'same-origin;report-to="coop"',
+          'cross-origin-embedder-policy': 'require-corp;report-to="coep"',
+          'cross-origin-resource-policy': 'same-origin',
+          helloworld: 'helloworld',
+          // 'content-type': 'text/html'
+        };
+      },
     }),
   ],
 };

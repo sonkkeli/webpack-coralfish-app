@@ -2,8 +2,8 @@
 
 # This script is used locally to build eeeeeverything, with rollup.
 
-export ROLLUP_VERSION=0.0.4
-export WBN_VERSION=0.0.8
+export ROLLUP_VERSION=0.1.1
+export WBN_VERSION=0.0.9
 export WBN_SIGN_VERSION=0.0.1
 
 # Remove old existing bundles.
