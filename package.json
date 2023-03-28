@@ -6,6 +6,7 @@
     "run:webpack": "bash run-with-webpack.sh",
     "run:rollup": "bash run-with-rollup.sh",
     "run:cli": "bash run-with-cli.sh",
+    "run:golang": "bash run-with-golang.sh",
     "test:webpack": "bash test-webpack.sh",
     "test:rollup": "bash test-rollup.sh",
     "lint": "npx prettier --write **/*.{js,md} --config ./package.json"
