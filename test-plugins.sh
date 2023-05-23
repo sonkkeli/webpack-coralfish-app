@@ -1,8 +1,7 @@
 # This script is used locally to run the tests of Webpack plugin.
 
 export WBN_VERSION=0.0.9
-export WBN_SIGN_VERSION=0.0.1
-
+export WBN_SIGN_VERSION=0.1.0
 # Remove old existing bundles.
 rm -f ~/webpack-coralfish-app/static/*wbn &&
 
@@ -13,7 +12,7 @@ cd ~/webpackage/js/bundle && rm -f *.tgz && npm i && npm run build && npm pack &
 cd ~/webpackage/js/sign && rm -f *.tgz && npm i && npm run build && npm pack && 
 
 # Build the user app and override the underlying packages with my own.
-cd ~/webbundle-webpack-plugin && npm i && 
+cd ~/webbundle-plugins && npm i && npm run build && 
 npm install --save ~/webpackage/js/bundle/wbn-$WBN_VERSION.tgz && 
 npm install --save ~/webpackage/js/sign/wbn-sign-$WBN_SIGN_VERSION.tgz && 
 npm run test

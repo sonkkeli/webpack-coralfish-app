@@ -1,6 +1,6 @@
 
 export WBN_VERSION=0.0.9
-export WBN_SIGN_VERSION=0.0.1
+export WBN_SIGN_VERSION=0.1.0
 
 # Remove old existing bundles.
 rm -f ~/webpack-coralfish-app/wbncli/*wbn &&
@@ -30,9 +30,14 @@ cd ~/webpack-coralfish-app && npm i && \
 npm install --save ~/webpackage/js/sign/wbn-sign-$WBN_SIGN_VERSION.tgz &&
 
 # Run the CLI with unencrypted key
-wbn-sign -i ./wbncli/out.wbn -o ./wbncli/signed.swbn \
--k ~/coralfish-dev-access/sign_keys/ed25519/private_key.pem
+# wbn-sign -i ./wbncli/out.wbn -o ./wbncli/signed.swbn \
+# -k ~/coralfish-dev-access/sign_keys/ed25519/private_key.pem
+
+# To bypass the password prompting for the passphrase
+# export WEB_BUNDLE_SIGNING_PASSPHRASE=helloworld
 
 # Run the CLI with encrypted key
-# wbn-sign -i ./wbncli/out.wbn -o ./wbncli/signed.wbn \
-# -k ~/yubikey-sign/ed25519-sign-keys/enckey.pem
+wbn-sign -i ./wbncli/out.wbn -o ./wbncli/signed.swbn \
+-k file_enc.pem
+
+# delete WEB_BUNDLE_SIGNING_PASSPHRASE

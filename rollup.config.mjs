@@ -1,39 +1,71 @@
 import webbundle from 'rollup-plugin-webbundle';
-import * as wbnSign from 'wbn-sign';
+// import * as wbnSign from 'wbn-sign';
+import crypto from 'crypto';
 import dotenv from 'dotenv';
 dotenv.config({ path: './.env' });
 
-// const key = wbnSign.parsePemKey(process.env.ED25519KEY);
-const key = wbnSign.parsePemKey(
-  process.env.ENC_ED25519KEY,
-  await wbnSign.readPassphrase()
-);
+const toHexString = (bytes) => {
+  return Array.from(bytes, (byte) => {
+    return ('0' + (byte & 0xff).toString(16)).slice(-2);
+  }).join('');
+};
 
-export default {
-  input: 'src/index.js',
-  output: {
-    dir: 'static',
-    format: 'cjs',
-  },
-  plugins: [
-    webbundle({
-      baseURL: new wbnSign.WebBundleId(key).serializeWithIsolatedWebAppOrigin(),
-      static: { dir: 'static' },
-      output: 'rollup.swbn',
-      integrityBlockSign: { key },
-      headerOverride: () => {
-        return {
-          'access-control-allow-headers':
-            'Cross-Origin-Embedder-Policy, Cross-Origin-Opener-Policy, Cross-Origin-Resource-Policy',
-          'cross-origin-opener-policy': 'same-origin;report-to="coop"',
-          'cross-origin-embedder-policy': 'require-corp;report-to="coep"',
+class CustomSigningStrategy {
+  async sign(data) {
+    let response = await fetch('https://silly-signer-service.glitch.me/sign/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: toHexString(data),
+    });
+    return Buffer.from(await response.text(), 'hex');
+  }
+
+  async getPublicKey() {
+    let response = await fetch(
+      'https://silly-signer-service.glitch.me/publickey/'
+    );
+    return crypto.createPublicKey({
+      type: 'spki',
+      format: 'der',
+      key: await response.text(),
+      encoding: 'hex',
+    });
+  }
+}
+
+export default async () => {
+  // const key = wbnSign.parsePemKey(process.env.ED25519KEY);
+
+  // const key = wbnSign.parsePemKey(
+  //   process.env.ENC_ED25519KEY,
+  //   await wbnSign.readPassphrase()
+  // );
+
+  return {
+    input: 'src/index.js',
+    output: {
+      dir: 'static',
+      format: 'cjs',
+    },
+    plugins: [
+      webbundle({
+        // baseURL: new wbnSign.WebBundleId(
+        //   key
+        // ).serializeWithIsolatedWebAppOrigin(),
+        static: { dir: 'static' },
+        output: 'rollup.swbn',
+        integrityBlockSign: { strategy: new CustomSigningStrategy() },
+        headerOverride: {
+          helloworld: 'hello',
+          'cross-origin-embedder-policy': 'require-corp',
+          'cross-origin-opener-policy': 'same-origin',
           'cross-origin-resource-policy': 'same-origin',
-          helloworld: 'helloworld',
-          // 'content-type': 'text/html'
-        };
-      },
-    }),
-  ],
+          'content-security-policy':
+            "base-uri 'none'; default-src 'self'; object-src 'none'; frame-src 'self' https:; connect-src 'self' https:; script-src 'self' 'wasm-unsafe-eval'; img-src 'self' https: blob: data:; media-src 'self' https: blob: data:; font-src 'self' blob: data:; require-trusted-types-for 'script';",
+        },
+      }),
+    ],
+  };
 };
 
 /**
