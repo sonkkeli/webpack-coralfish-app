@@ -1,7 +1,10 @@
 # This script is used locally to run the tests of Webpack plugin.
 
-export WBN_VERSION=0.0.9
-export WBN_SIGN_VERSION=0.1.0
+# Set package versions as environment values from .versions file.
+set -a
+source .versions
+set +a
+
 # Remove old existing bundles.
 rm -f ~/webpack-coralfish-app/static/*wbn &&
 

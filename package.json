@@ -18,7 +18,7 @@
     "path": "^0.12.7",
     "source-map-support": "^0.5.21",
     "wbn": "file:../webpackage/js/bundle/wbn-0.0.9.tgz",
-    "wbn-sign": "file:../webpackage/js/sign/wbn-sign-0.1.0.tgz"
+    "wbn-sign": "file:../webpackage/js/sign/wbn-sign-0.1.1.tgz"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
